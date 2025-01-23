@@ -15,8 +15,4 @@ This web app allows users to generate dynamic HTML forms based on their input. I
 - **Form Generation:** Google Gemini API
 - **Database:** Firebase Firestore (for user data storage)
 
-## Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/dynamic-form-generator.git
