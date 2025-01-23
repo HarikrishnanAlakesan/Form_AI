@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Form Generator</title>
+</head>
+<body>
+
+    <h1>Dynamic Form Generator</h1>
+    <p>Fill in the details below to generate a form:</p>
+
+    <!-- Input Fields for Form Details -->
+    <label for="formDescription">Form Description:</label><br>
+    <textarea id="formDescription" rows="4" style="width: 100%;" placeholder="Describe the purpose of the form..."></textarea><br><br>
+
+    <button onclick="generateForm()">Generate Form</button>
+
+    <!-- Predefined Form Template -->
+    <form id="dynamicForm" action="/submit_admission" method="POST" style="display:none; margin-top: 20px;">
+        <div id="formFields"></div>
+        <button type="submit">Submit Form</button>
+    </form>
+
+    <script>
+        async function generateForm() {
+            // Get the form description
+            const formDescription = document.getElementById('formDescription').value.trim();
+
+            // Validate input
+            if (!formDescription) {
+                alert('Please fill out the form description.');
+                return;
+            }
+
+            // Send the description to the backend to generate the form
+            try {
+                const response = await fetch('/generate_form', {
+                    method: 'POST',
+                    action:'/submit_admission',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ formType: 'Custom Form', fields: ['Name', 'Email'] })
+                });
+
+                const data = await response.json();
+
+                async function generateForm() {
+    // Get the form type and fields from the input
+    const formType = document.getElementById('formType').value.trim();
+    const fields = document.getElementById('fields').value.trim().split(',');
+
+    // Validate input
+    if (!formType || fields.length === 0) {
+        alert('Please provide both form type and fields.');
+        return;
+    }
+
+    // Send input to the backend via a POST request
+    const response = await fetch('/submit_admission', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ formType, fields })
+    });
+
+    // Parse and display the generated form
+    const data = await response.json();
+    if (data.form) {
+        // Display the generated form inside a container
+        const formFieldsContainer = document.getElementById('formFields');
+        formFieldsContainer.innerHTML = data.form;
+
+        // Show the form container (ensure it's hidden initially with CSS)
+        const dynamicForm = document.getElementById('dynamicForm');
+        dynamicForm.style.display = 'block';
+    } else {
+        alert('Error generating form. Please try again.');
+    }
+}
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate the form.');
+            }
+        }
+    </script>
+
+</body>
+</html>
